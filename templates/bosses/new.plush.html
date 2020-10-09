@@ -1,0 +1,5 @@
+<h1>Add a Boss</h1>
+<%= form_for(boss, {action: bossesCreatePath()}) { %>
+  <%= f.InputTag("Name") %>
+  <%= f.SubmitTag("Create") %>
+<% } %>

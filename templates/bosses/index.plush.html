@@ -1,0 +1,7 @@
+<h1>Bosses</h1>
+
+<ul class="list-group list-group-flush">
+  <%= for (b) in bosses { %>
+    <li class="list-group-item"><a href="/bosses/<%= b.ID %>"><%= b.Name %></a></li>
+  <% } %>
+</ul>

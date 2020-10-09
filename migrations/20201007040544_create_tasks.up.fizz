@@ -1,0 +1,11 @@
+create_table("tasks") {
+	t.Column("id", "integer", {primary: true, autoincrement: true})
+	t.Column("rate", "integer", {})
+	t.Column("description", "text", {"null": true})
+	t.Column("start_time", "datetime", {"null": true})
+	t.Column("end_time", "datetime", {"null": true})
+	t.Column("duration", "integer", {"null": true})
+	t.Column("contract_id", "integer", {})
+	t.ForeignKey("contract_id", {"contracts": ["id"]}, {"on_delete": "cascade"})
+	t.Timestamps()
+}

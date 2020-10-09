@@ -61,6 +61,25 @@ func App() *buffalo.App {
 
 		app.GET("/", HomeHandler)
 
+		app.GET("/users/index", UsersIndex)
+		app.GET("/users/new", UsersNew)
+		app.POST("/users/create", UsersCreate)
+		app.GET("/users/{id}", UsersShow)
+
+		app.GET("/users/{user_id}/contracts", UsersContractsIndex)
+		app.GET("/users/{user_id}/contracts/new", UsersContractsNew)
+		app.POST("/users/{user_id}/contracts/new", UsersContractCreate)
+		app.GET("/users/{user_id}/contracts/{contract_id}", UsersContractShow)
+
+		app.GET("/bosses/index", BossesIndex)
+		app.GET("/bosses/new", BossesNew)
+		app.POST("/bosses/create", BossesCreate)
+		app.GET("/bosses/{id}", BossesShow)
+
+		app.POST("/users/{user_id}/contracts{contract_id}/task/create", UserTaskCreate)
+		app.GET("/tasks/{id}", TasksShow)
+		app.GET("/tasks/{id}/edit", TasksEdit)
+		app.POST("/tasks/{id}/edit", TasksUpdate)
 		app.ServeFiles("/", assetsBox) // serve files from the public directory
 	}
 

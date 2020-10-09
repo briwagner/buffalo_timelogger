@@ -1,0 +1,4 @@
+<h1>Add a User</h1>
+<%= form({action: usersCreatePath(), method: "POST"}) { %>
+  <%= partial("users/user_new.html") %>
+<% } %>

@@ -1,0 +1,32 @@
+ul.main-nav {
+  background-color: #efefef;
+  font-size: 1.1em;
+  font-weight: 800;
+  text-transform: uppercase;
+  margin-bottom: 1em;
+  .nav-item {
+
+    a {
+      color: navy;
+      padding: 1em;
+
+      &:hover {
+        color: mediumblue;
+      }
+
+      &:first-of-type {
+        padding-left: 1.5em;
+      }
+
+      &:last-of-type {
+        padding-right: 1.5em;
+      }
+    }
+  }
+}
+.nav-link.active {
+  background-color: lightcyan;
+}
+.nav {
+  justify-content: space-between;
+}

@@ -1,0 +1,6 @@
+<div>
+  <%= f.InputTag({name: "FirstName", label: "First name", required: true, value: user.FirstName}) %>
+  <%= f.InputTag({name: "LastName", label: "Last name", required: true, value: user.LastName}) %>
+  <%= f.InputTag({name: "Email", label: "Email", type: "email", required: true, value: user.Email}) %>
+  <%= f.SubmitTag("Create") %>
+</div>

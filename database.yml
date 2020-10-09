@@ -1,11 +1,11 @@
 ---
 development:
   dialect: "mysql"
-  database: "buftester_development"
+  database: "buftester"
   host: "localhost"
   port: "3306"
-  user: "root"
-  password: "root"
+  user: "buftester"
+  password: "password"
 
 test:
   dialect: "mysql"

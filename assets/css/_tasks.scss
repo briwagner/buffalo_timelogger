@@ -1,0 +1,37 @@
+.user-rate {
+  display: inline-block;
+  font-weight: 800;
+}
+
+.user-rate__label {
+  margin-bottom: 0;
+  text-align: center;
+  text-transform: uppercase;
+  background-color: navy;
+  color: white;
+}
+
+.user-rate__value {
+  border-radius: 2%;
+  background-color: #efefef;
+  color: navy;
+  font-size: 1.75em;
+  padding: 0.25em 1em;
+}
+
+.worklog .list-group-item {
+  display: flex;
+  flex-direction: row;
+
+  .badge {
+    margin-right: 1em;
+  }
+
+  a {
+    padding: 0 1em;
+  }
+}
+
+.flex-row-end {
+  margin-left: auto;
+}

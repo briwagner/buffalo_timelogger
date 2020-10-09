@@ -23,6 +23,12 @@ func init() {
 			// below and import "github.com/gobuffalo/helpers/forms"
 			// forms.FormKey:     forms.Form,
 			// forms.FormForKey:  forms.FormFor,
+			"isActiveNav": func(m string, cp string) string {
+				if m == cp {
+					return "nav-link active"
+				}
+				return "nav-link"
+			},
 		},
 	})
 }

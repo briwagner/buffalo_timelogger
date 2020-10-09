@@ -1,0 +1,8 @@
+<h1>Edit</h1>
+
+<%= form_for(task, {action: editTaskPath({id: task.ID})}) { %>
+  <%= f.InputTag("Rate", {value: task.Rate}) %>
+  <%= f.InputTag("Duration", {value: task.Duration}) %>
+  <%= f.TextArea("Description", {name: "Description", value: task.Description, rows: 4}) %>
+  <%= f.SubmitTag("Update") %>
+<% } %>

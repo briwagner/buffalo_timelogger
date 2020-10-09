@@ -1,0 +1,21 @@
+<h1>Task</h1>
+<p><%= linkTo(editTaskPath({id: task.ID})) { %>edit<% } %></p>
+<div class="row">
+  <div class="col-md-2">
+    <div class="user-rate">
+      <p class="user-rate__label">Rate</p>
+      <p class="user-rate__value">$<%= task.Rate %></p>
+    </div>
+  </div>
+  <div class="col-md-10">
+    <div>
+      <p>
+        <span class="badge badge-secondary"><%= task.StartTime.Format("Jan 2") %></span>
+        <%= task.Duration %> min
+      </p>
+    </div>
+    <p>
+      <%= task.Description %>
+    </p>
+  </div>
+</div>

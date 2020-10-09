@@ -1,0 +1,9 @@
+create_table("contracts") {
+	t.Column("id", "integer", {primary: true, autoincrement: true})
+	t.Column("rate", "integer", {})
+	t.Column("boss_id", "integer", {})
+	t.Column("user_id", "integer", {})
+	t.ForeignKey("boss_id", {"bosses": ["id"]}, {})
+	t.ForeignKey("user_id", {"users": ["id"]}, {})
+	t.Timestamps()
+}

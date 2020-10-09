@@ -1,0 +1,17 @@
+<h1><%= current_user.FullName() %></h1>
+<p><%= current_user.Email %></p>
+
+<h2>Contracts</h2>
+<ul class="list-group list-group-flush">
+  <%= for (c) in current_user.Contracts { %>
+    <li class="list-group-item">
+      <a href="/users/<%= current_user.ID %>/contracts/<%= c.ID %>"><%= c.Boss.Name %></a>
+    </li>
+  <% } %>
+</ul>
+
+<p>
+  <%= linkTo(newUserContractsPath({user_id: current_user.ID}), {class: "btn btn-primary"}) { %>
+    Add Contract
+  <% } %>
+</p>
