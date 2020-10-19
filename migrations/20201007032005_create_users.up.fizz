@@ -1,7 +1,9 @@
 create_table("users") {
-	t.Column("id", "integer", {primary: true, autoincrement: true})
+	t.Column("id", "uuid", {primary: true})
 	t.Column("email", "string", {})
 	t.Column("first_name", "string", {})
 	t.Column("last_name", "string", {})
+	t.Column("password_hash", "string", {})
 	t.DisableTimestamps()
 }
+add_index("users", "email", {"unique": true})

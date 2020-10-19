@@ -58,13 +58,19 @@ func App() *buffalo.App {
 
 		// Setup and use translations:
 		app.Use(translations())
+		app.Use(SetCurrentUser)
+		// app.Use(Authorize)
 
 		app.GET("/", HomeHandler)
 
-		app.GET("/users/index", UsersIndex)
-		app.GET("/users/new", UsersNew)
-		app.POST("/users/create", UsersCreate)
-		app.GET("/users/{id}", UsersShow)
+		app.GET("/signin", AnonOnly(AuthNew))
+		app.POST("/signin", AuthCreate)
+		app.DELETE("/signout", AuthDestroy)
+
+		app.GET("/users", UsersNew)
+		app.POST("/users", UsersCreate)
+		app.GET("/users/index", Authorize(UsersIndex))
+		app.GET("/users/{user_id}", Authorize(IsOwner(UsersShow)))
 
 		app.GET("/users/{user_id}/contracts", UsersContractsIndex)
 		app.GET("/users/{user_id}/contracts/new", UsersContractsNew)
@@ -80,6 +86,8 @@ func App() *buffalo.App {
 		app.GET("/tasks/{id}", TasksShow)
 		app.GET("/tasks/{id}/edit", TasksEdit)
 		app.POST("/tasks/{id}/edit", TasksUpdate)
+
+		// app.Middleware.Skip(Authorize, HomeHandler, UsersNew, UsersCreate, AuthNew, AuthCreate)
 		app.ServeFiles("/", assetsBox) // serve files from the public directory
 	}
 

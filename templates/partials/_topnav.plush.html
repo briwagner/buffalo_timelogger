@@ -4,7 +4,16 @@
 <ul class="main-nav nav">
   <li class="nav-item"><a href="/" class='<%= isActiveNav("rootPath", cp) %>'>Home</a></li>
   <li class="nav-item"><a href="/users/index" class='<%= isActiveNav("usersIndexPath", cp) %>'>Users</a></li>
-  <li class="nav-item"><a href="/users/new" class='<%= isActiveNav("newUsersPath", cp) %>'>Create User</a></li>
+  <li class="nav-item"><a href="/users" class='<%= isActiveNav("usersPath", cp) %>'>Create User</a></li>
   <li class="nav-item"><a href="/bosses/index" class='<%= isActiveNav("bossesIndexPath", cp) %>'>Bosses</a></li>
   <li class="nav-item"><a href="/bosses/new" class='<%= isActiveNav("newBossesPath", cp) %>'>Create Boss</a></li>
+  <%= if (isLoggedIn()) { %>
+    <li class="nav-item">
+      <%= form({action: signoutPath(), method: "DELETE"}) { %>
+        <button class="btn btn-success">Logout</button>
+      <% } %>
+    </li>
+  <% } else { %>
+    <li class="nav-item"><a href="/signin" class='<%= isActiveNav("newBossesPath", cp) %>'>Log in</a></li>
+  <% } %>
 </ul>

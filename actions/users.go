@@ -2,6 +2,7 @@ package actions
 
 import (
 	"buftester/models"
+	"fmt"
 	"log"
 	"net/http"
 	"strconv"
@@ -10,6 +11,50 @@ import (
 	"github.com/gobuffalo/pop/v5"
 	"github.com/pkg/errors"
 )
+
+// SetCurrentUser attempts to find a user based on the current_user_id
+// in the session. If one is found it is set on the context.
+func SetCurrentUser(next buffalo.Handler) buffalo.Handler {
+	return func(c buffalo.Context) error {
+		if uid := c.Session().Get("current_user_id"); uid != nil {
+			u := &models.User{}
+			tx := c.Value("tx").(*pop.Connection)
+			err := tx.Find(u, uid)
+			if err != nil {
+				return errors.WithStack(err)
+			}
+			c.Set("current_user", u)
+		}
+		return next(c)
+	}
+}
+
+// Authorize requires a user be logged in before accessing a route
+func Authorize(next buffalo.Handler) buffalo.Handler {
+	return func(c buffalo.Context) error {
+		if uid := c.Session().Get("current_user_id"); uid == nil {
+			c.Flash().Add("danger", "You must be authorized to see that page")
+			return c.Redirect(302, "/")
+		}
+		return next(c)
+	}
+}
+
+// IsOwner checks if the current user has access to route.
+func IsOwner(next buffalo.Handler) buffalo.Handler {
+	return func(c buffalo.Context) error {
+		// Session().Get() returns interface, so we cast to string.
+		if uid := c.Session().Get("current_user_id"); uid != nil {
+			pathUserID := c.Param("user_id")
+			log.Printf("\n\nUser |%s| and |%s|\n\n", uid, pathUserID)
+			if pathUserID != fmt.Sprintf("%s", uid) {
+				c.Flash().Add("success", "You do not have access to that user.")
+				return c.Redirect(302, "/")
+			}
+		}
+		return next(c)
+	}
+}
 
 // UsersIndex default implementation.
 func UsersIndex(c buffalo.Context) error {
@@ -22,7 +67,6 @@ func UsersIndex(c buffalo.Context) error {
 	}
 
 	c.Set("users", users)
-
 	return c.Render(http.StatusOK, r.HTML("users/index.html"))
 }
 
@@ -34,26 +78,25 @@ func UsersNew(c buffalo.Context) error {
 
 // UsersCreate responds to POST.
 func UsersCreate(c buffalo.Context) error {
-	user := &models.User{}
-	if err := c.Bind(user); err != nil {
-		return err
+	u := &models.User{}
+	if err := c.Bind(u); err != nil {
+		return errors.WithStack(err)
 	}
 
 	tx := c.Value("tx").(*pop.Connection)
-	// Validate the data from the html form.
-	verrs, err := tx.ValidateAndCreate(user)
+	verrs, err := u.Create(tx)
 	if err != nil {
 		return errors.WithStack(err)
 	}
 
 	if verrs.HasAny() {
-		c.Set("user", user)
+		c.Set("user", u)
 		// Make the errors available inside the html template
 		c.Set("errors", verrs)
-		return c.Render(422, r.HTML("users/new.html"))
+		return c.Render(200, r.HTML("users/new.html"))
 	}
 	c.Flash().Add("success", "User was created successfully")
-	return c.Redirect(303, "/users/%d", user.ID)
+	return c.Redirect(303, "/users/%s", u.ID)
 }
 
 // UsersShow renders one user.
@@ -61,9 +104,8 @@ func UsersShow(c buffalo.Context) error {
 	tx := c.Value("tx").(*pop.Connection)
 
 	user := &models.User{}
-	err := tx.Eager("Contracts.Boss").Find(user, c.Param("id"))
+	err := tx.Eager("Contracts.Boss").Find(user, c.Param("user_id"))
 	if err != nil {
-		log.Println(err)
 		c.Flash().Add("warning", "Cannot find that user.")
 		return c.Redirect(307, "/")
 	}
@@ -177,7 +219,7 @@ func UsersContractCreate(c buffalo.Context) error {
 	}
 
 	c.Flash().Add("success", "Contract created.")
-	return c.Redirect(303, "/users/%s", strconv.Itoa(user.ID))
+	return c.Redirect(303, "/users/%s", user.ID)
 }
 
 // UsersContractShow gets a single contract for the User ID.
@@ -248,5 +290,5 @@ func UserTaskCreate(c buffalo.Context) error {
 		return c.Render(422, r.HTML("users/contract_show.html"))
 	}
 	c.Flash().Add("success", "Task created successfully")
-	return c.Redirect(303, "/users/%s/contracts/%s", strconv.Itoa(user.ID), strconv.Itoa(contract.ID))
+	return c.Redirect(303, "/users/%s/contracts/%s", user.ID, strconv.Itoa(contract.ID))
 }

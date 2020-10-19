@@ -5,3 +5,9 @@
     <li class="list-group-item"><a href="/bosses/<%= b.ID %>"><%= b.Name %></a></li>
   <% } %>
 </ul>
+
+<div class="footer-link">
+  <%= linkTo(newBossesPath(), {class: "btn btn-primary"}) { %>
+    Add a Boss
+  <% } %>
+</div>

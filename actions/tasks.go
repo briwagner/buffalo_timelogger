@@ -73,6 +73,6 @@ func TasksUpdate(c buffalo.Context) error {
 	}
 
 	c.Flash().Add("success", "Task updated.")
-	return c.Redirect(303, "/users/%s/contracts/%s", strconv.Itoa(task.Contract.UserID), strconv.Itoa(task.Contract.ID))
+	return c.Redirect(303, "/users/%s/contracts/%s", task.Contract.UserID, strconv.Itoa(task.Contract.ID))
 	// return c.Redirect(303, "/")
 }

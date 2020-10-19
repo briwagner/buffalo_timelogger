@@ -1,5 +1,6 @@
 <h1>Add a Boss</h1>
 <%= form_for(boss, {action: bossesCreatePath()}) { %>
   <%= f.InputTag("Name") %>
-  <%= f.SubmitTag("Create") %>
+  <%= f.CheckboxTag("CreateContract", {label: "Add a contract"}) %>
+  <button class="btn btn-success">Create</button>
 <% } %>

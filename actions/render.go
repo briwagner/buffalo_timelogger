@@ -3,6 +3,7 @@ package actions
 import (
 	"github.com/gobuffalo/buffalo/render"
 	"github.com/gobuffalo/packr/v2"
+	"github.com/gobuffalo/plush"
 )
 
 var r *render.Engine
@@ -28,6 +29,12 @@ func init() {
 					return "nav-link active"
 				}
 				return "nav-link"
+			},
+			"isLoggedIn": func(help plush.HelperContext) bool {
+				if _, ok := help.Value("current_user_id").(string); ok {
+					return true
+				}
+				return false
 			},
 		},
 	})

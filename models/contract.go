@@ -6,6 +6,7 @@ import (
 
 	"github.com/gobuffalo/pop/v5"
 	"github.com/gobuffalo/validate/v3"
+	"github.com/gofrs/uuid"
 )
 
 // Contract is used by pop to map your contracts database table to your go code.
@@ -14,7 +15,7 @@ type Contract struct {
 	Rate      int       `json:"rate" db:"rate"`
 	BossID    int       `json:"-" db:"boss_id"`
 	Boss      *Boss     `json:"boss" belongs_to:"boss"`
-	UserID    int       `json:"-" db:"user_id"`
+	UserID    uuid.UUID `json:"-" db:"user_id"`
 	User      *User     `json:"user" belongs_to:"user"`
 	Tasks     []Task    `json:"tasks,omitempty" has_many:"tasks"`
 	CreatedAt time.Time `json:"created_at" db:"created_at"`

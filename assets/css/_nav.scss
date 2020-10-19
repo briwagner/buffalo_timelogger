@@ -1,14 +1,17 @@
 ul.main-nav {
   background-color: #efefef;
-  font-size: 1.1em;
-  font-weight: 800;
-  text-transform: uppercase;
   margin-bottom: 1em;
+
   .nav-item {
 
-    a {
+    a,
+    button {
+      font-size: 1.1em;
+      font-weight: 800;
+      text-transform: uppercase;
       color: navy;
       padding: 1em;
+      border: none;
 
       &:hover {
         color: mediumblue;
@@ -21,6 +24,10 @@ ul.main-nav {
       &:last-of-type {
         padding-right: 1.5em;
       }
+    }
+
+    .btn {
+      background: none;
     }
   }
 }
