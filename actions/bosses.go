@@ -58,7 +58,7 @@ func BossesShow(c buffalo.Context) error {
 	tx := c.Value("tx").(*pop.Connection)
 
 	boss := &models.Boss{}
-	err := tx.Find(boss, c.Param("id"))
+	err := tx.Eager("Contracts.User").Find(boss, c.Param("boss_id"))
 	if err != nil {
 		c.Flash().Add("warning", "Cannot find that boss.")
 		return c.Redirect(307, "/")

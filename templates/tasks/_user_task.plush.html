@@ -1,4 +1,7 @@
-<%= f.InputTag("Rate", {value: contract.Rate}) %>
-<%= f.InputTag("Duration", {value: task.Duration}) %>
+<div class="row">
+  <%= f.InputTag("Rate", {value: contract.Rate, size: "4"}) %>
+  <%= f.InputTag("Duration", {value: task.Duration, size: "4"}) %>
+</div>
 <%= f.TextArea("Description", {name: "Description", value: task.Description, rows: 4}) %>
+<%= f.InputTag("StartTime", {value: task.StartTime, label: "Start Date", type: "date"}) %>
 <%= f.SubmitTag("Create") %>

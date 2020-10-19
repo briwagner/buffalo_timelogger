@@ -1,0 +1,32 @@
+.list-group .list-group-item {
+  padding-left: 0;
+}
+
+.list-group-item.list-group-flex {
+  display: flex;
+  flex-direction: row;
+
+  .flex-row-end {
+    margin-left: auto;
+  }
+}
+
+.badge {
+  margin-right: 1em;
+  padding-top: 0.5em;
+}
+
+div.footer-links {
+  display: flex;
+  flex-direction: row;
+  margin: 1em 0;
+
+  .row-end {
+    margin-left: auto;
+  }
+}
+
+.jumbotron .row {
+  margin-left: 0;
+  margin-right: 0;
+}

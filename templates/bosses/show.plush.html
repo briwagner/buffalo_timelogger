@@ -1,3 +1,13 @@
 <h1><%= boss.Name %></h1>
 
-<!-- todo: show if user has contract; if not show link to create one. -->
+<div class="contract-list">
+  <ul class="list-group list-group-flush">
+    <%= for (contract) in boss.Contracts { %>
+      <li class="list-group-item list-group-flex">
+        <span class="badge badge-secondary">$<%= contract.Rate%></span>
+        <%= contract.User.FullName() %>
+        <%= linkTo(userContractPath({user_id: contract.UserID, contract_id: contract.ID}), {class: "flex-row-end"}) { %>view<% } %>
+      </li>
+    <% } %>
+  </ul>
+</div>

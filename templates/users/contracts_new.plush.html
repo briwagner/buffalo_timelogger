@@ -1,6 +1,11 @@
 <div>
   <h1>New Contract for <%= user.FullName() %></h1>
-  <%= form_for(contract, {action: newUserContractsPath({user_id: user.ID})}) { %>
-    <%= partial("contracts/contract_new.html") %>
+
+  <%= if (len(bosses) > 0) { %>
+    <%= form_for(contract, {action: userContractsPath({user_id: user.ID})}) { %>
+      <%= partial("contracts/contract_new.html") %>
+    <% } %>
+  <% } else { %>
+    <h3>No bosses found. Please <a href="/bosses/new">create one</a> first.</h3>
   <% } %>
 </div>

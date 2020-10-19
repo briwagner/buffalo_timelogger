@@ -73,21 +73,21 @@ func App() *buffalo.App {
 		app.GET("/users/{user_id}", Authorize(IsOwner(UsersShow)))
 
 		app.GET("/users/{user_id}/contracts", UsersContractsIndex)
+		app.POST("/users/{user_id}/contracts", UsersContractCreate)
 		app.GET("/users/{user_id}/contracts/new", UsersContractsNew)
-		app.POST("/users/{user_id}/contracts/new", UsersContractCreate)
 		app.GET("/users/{user_id}/contracts/{contract_id}", UsersContractShow)
 
 		app.GET("/bosses/index", BossesIndex)
 		app.GET("/bosses/new", BossesNew)
 		app.POST("/bosses/create", BossesCreate)
-		app.GET("/bosses/{id}", BossesShow)
+		app.GET("/bosses/{boss_id}", BossesShow)
 
 		app.POST("/users/{user_id}/contracts{contract_id}/task/create", UserTaskCreate)
-		app.GET("/tasks/{id}", TasksShow)
-		app.GET("/tasks/{id}/edit", TasksEdit)
-		app.POST("/tasks/{id}/edit", TasksUpdate)
+		app.GET("/tasks/{task_id}", TasksShow)
+		app.GET("/tasks/{task_id}/edit", TasksEdit)
+		app.POST("/tasks/{task_id}/edit", TasksUpdate)
 
-		// app.Middleware.Skip(Authorize, HomeHandler, UsersNew, UsersCreate, AuthNew, AuthCreate)
+		app.Middleware.Skip(Authorize, HomeHandler, UsersNew, UsersCreate, AuthNew, AuthCreate)
 		app.ServeFiles("/", assetsBox) // serve files from the public directory
 	}
 

@@ -6,4 +6,3 @@ create_table("users") {
 	t.Column("password_hash", "string", {})
 	t.DisableTimestamps()
 }
-add_index("users", "email", {"unique": true})

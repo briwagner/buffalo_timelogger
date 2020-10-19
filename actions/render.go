@@ -1,9 +1,10 @@
 package actions
 
 import (
+	"fmt"
+
 	"github.com/gobuffalo/buffalo/render"
 	"github.com/gobuffalo/packr/v2"
-	"github.com/gobuffalo/plush"
 )
 
 var r *render.Engine
@@ -30,11 +31,15 @@ func init() {
 				}
 				return "nav-link"
 			},
-			"isLoggedIn": func(help plush.HelperContext) bool {
-				if _, ok := help.Value("current_user_id").(string); ok {
-					return true
+			"formatDuration": func(t int) string {
+				if t > 60 {
+					min := t % 60
+					if min == 0 {
+						return fmt.Sprintf("%dh", t/60)
+					}
+					return fmt.Sprintf("%dh %dm", t/60, min)
 				}
-				return false
+				return fmt.Sprintf("%dm", t)
 			},
 		},
 	})

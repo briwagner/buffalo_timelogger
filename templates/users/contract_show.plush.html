@@ -1,18 +1,18 @@
 <h1><%= current_user.FullName() %> for <%= contract.Boss.Name %></h1>
 
-<%= linkTo(userPath({id: current_user.ID})) { %>More Contracts <% } %>
+<%= linkTo(userPath({user_id: current_user.ID})) { %>All Contracts <% } %>
 
 <div class="worklog">
   <h2>Worklog</h2>
   <%= if (len(contract.Tasks) > 0) { %>
-    <ul class="list-group list-group-flush">
+    <ul class="list-group list-group-flush list-group-striped">
       <%= for (t) in contract.Tasks { %>
-        <li class="list-group-item">
+        <li class="list-group-item list-group-flex">
           <span class="badge badge-secondary"><%= t.StartTime.Format("Jan 2") %></span>
-          <%= t.Duration %> min |
-          <%= t.Description %>
+          <%= formatDuration(t.Duration) %> |
+          <%= t.Description %> -
           $<%= t.Rate %>
-          <%= linkTo(editTaskPath({id: t.ID}), {class: "flex-row-end"}) { %>edit<% } %>
+          <%= linkTo(editTaskPath({task_id: t.ID}), {class: "flex-row-end"}) { %>edit<% } %>
         </li>
       <% } %>
     </ul>

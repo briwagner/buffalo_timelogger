@@ -1,8 +1,10 @@
-<h1>Edit</h1>
+<h1>Edit Task</h1>
 
-<%= form_for(task, {action: editTaskPath({id: task.ID})}) { %>
+<%= form_for(task, {action: editTaskPath({task_id: task.ID})}) { %>
   <%= f.InputTag("Rate", {value: task.Rate}) %>
   <%= f.InputTag("Duration", {value: task.Duration}) %>
   <%= f.TextArea("Description", {name: "Description", value: task.Description, rows: 4}) %>
-  <%= f.SubmitTag("Update") %>
+  <%= f.InputTag("StartTime", {value: task.StartTime, label: "Start Date", type: "date"}) %>
+  <button class="btn btn-success">Edit</button>
+  <%=  linkTo(userContractPath({user_id: task.Contract.UserID, contract_id: task.Contract.ID}), {class: "btn btn-secondary"}) { %>Cancel <% } %>
 <% } %>

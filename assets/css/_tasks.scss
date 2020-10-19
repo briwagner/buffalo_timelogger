@@ -19,19 +19,13 @@
   padding: 0.25em 1em;
 }
 
-.worklog .list-group-item {
-  display: flex;
-  flex-direction: row;
+.list-group-striped .list-group-item:nth-child(even) {
+  background-color: #efefef;
+}
 
-  .badge {
-    margin-right: 1em;
-  }
+.worklog .list-group-item {
 
   a {
     padding: 0 1em;
   }
-}
-
-.flex-row-end {
-  margin-left: auto;
 }

@@ -3,9 +3,10 @@ package actions
 import (
 	"buftester/models"
 	"fmt"
-	"log"
 	"net/http"
+	"sort"
 	"strconv"
+	"time"
 
 	"github.com/gobuffalo/buffalo"
 	"github.com/gobuffalo/pop/v5"
@@ -46,7 +47,6 @@ func IsOwner(next buffalo.Handler) buffalo.Handler {
 		// Session().Get() returns interface, so we cast to string.
 		if uid := c.Session().Get("current_user_id"); uid != nil {
 			pathUserID := c.Param("user_id")
-			log.Printf("\n\nUser |%s| and |%s|\n\n", uid, pathUserID)
 			if pathUserID != fmt.Sprintf("%s", uid) {
 				c.Flash().Add("success", "You do not have access to that user.")
 				return c.Redirect(302, "/")
@@ -157,10 +157,6 @@ func UsersContractsNew(c buffalo.Context) error {
 		c.Flash().Add("warning", "No bosses found.")
 	}
 
-	if len(bosses) == 0 {
-		c.Flash().Add("warning", "No employers found. Please create one first.")
-	}
-
 	c.Set("user", user)
 	c.Set("contract", &models.Contract{})
 	c.Set("bosses", bosses)
@@ -242,10 +238,16 @@ func UsersContractShow(c buffalo.Context) error {
 		c.Flash().Add("warning", "Cannot find that contract.")
 		return c.Redirect(307, "/users/%s", user.ID)
 	}
-
 	c.Set("contract", contract)
 
+	sort.SliceStable(contract.Tasks, func(i, j int) bool {
+		return contract.Tasks[i].StartTime.Before(contract.Tasks[j].StartTime)
+	})
+
+	// Create empty task; set visible dates to now.
 	task := &models.Task{}
+	task.StartTime = time.Now()
+	task.EndTime = time.Now()
 	c.Set("task", task)
 
 	return c.Render(http.StatusOK, r.HTML("users/contract_show.html"))

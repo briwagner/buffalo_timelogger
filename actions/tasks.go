@@ -17,7 +17,7 @@ func TasksShow(c buffalo.Context) error {
 	tx := c.Value("tx").(*pop.Connection)
 
 	task := &models.Task{}
-	err := tx.Find(task, c.Param("id"))
+	err := tx.Find(task, c.Param("task_id"))
 	if err != nil {
 		c.Flash().Add("warning", "Cannot find that task.")
 		return c.Redirect(307, "/")
@@ -31,7 +31,7 @@ func TasksEdit(c buffalo.Context) error {
 	tx := c.Value("tx").(*pop.Connection)
 
 	task := &models.Task{}
-	err := tx.Find(task, c.Param("id"))
+	err := tx.Eager().Find(task, c.Param("task_id"))
 	if err != nil {
 		c.Flash().Add("warning", "Cannot find that task.")
 		return c.Redirect(307, "/")
@@ -45,7 +45,7 @@ func TasksUpdate(c buffalo.Context) error {
 	task := &models.Task{}
 
 	tx := c.Value("tx").(*pop.Connection)
-	err := tx.Eager().Find(task, c.Param("id"))
+	err := tx.Eager().Find(task, c.Param("task_id"))
 	if err != nil {
 		log.Println(err)
 		c.Flash().Add("warning", "Cannot find that task.")
