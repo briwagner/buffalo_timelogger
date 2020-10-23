@@ -30,11 +30,11 @@ production:
   #url: {{envOr "DATABASE_URL" "mysql://root:root@(localhost:3306)/buftester_production?parseTime=true&multiStatements=true&readTimeout=3s"}}
   #
   dialect: "mysql"
-  database: "buftester_production"
-  host: {{envOr "DATABASE_HOST" "localhost"}}
+  database: "ze98fuupnnbkjto0"
+  host: "ao9moanwus0rjiex.cbetxkdyhwsb.us-east-1.rds.amazonaws.com"
   port: {{envOr "DATABASE_PORT" "3306"}}
-  user: {{envOr "DATABASE_USER" "root"}}
-  password: {{envOr "DATABASE_PASSWORD" "root"}}
+  user: "mmf5b9i1l262dacz"
+  password: "o32d7rpkza1p2u4e"
   #
   # And you can also override connection parameters by setting it under options.
   #
