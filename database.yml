@@ -33,8 +33,8 @@ production:
   database: "ze98fuupnnbkjto0"
   host: "ao9moanwus0rjiex.cbetxkdyhwsb.us-east-1.rds.amazonaws.com"
   port: {{envOr "DATABASE_PORT" "3306"}}
-  user: "mmf5b9i1l262dacz"
-  password: "o32d7rpkza1p2u4e"
+  user: {{envOr "DATABASE_USER" "root"}}
+  password: {{envOr "DATABASE_PASSWORD" "root"}}
   #
   # And you can also override connection parameters by setting it under options.
   #
