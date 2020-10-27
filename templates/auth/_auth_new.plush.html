@@ -1,0 +1,5 @@
+<%= form_for(user, {action: signinPath()}) { %>
+  <%= f.InputTag("Email") %>
+  <%= f.InputTag("Password", {type: "password"}) %>
+  <button class="btn btn-success">Sign In!</button>
+<% } %>

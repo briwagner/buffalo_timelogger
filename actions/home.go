@@ -1,13 +1,17 @@
 package actions
 
 import (
+	"buftester/models"
 	"net/http"
 
 	"github.com/gobuffalo/buffalo"
 )
 
-// HomeHandler is a default handler to serve up
-// a home page.
+// HomeHandler serves up home page.
 func HomeHandler(c buffalo.Context) error {
-	return c.Render(http.StatusOK, r.HTML("index.html"))
+	u := c.Value("current_user")
+	if u == nil {
+		c.Set("new_user", models.User{})
+	}
+	return c.Render(http.StatusOK, r.HTML("home/index.html"))
 }

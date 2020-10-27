@@ -29,12 +29,14 @@ func BossesNew(c buffalo.Context) error {
 	return c.Render(http.StatusOK, r.HTML("bosses/new.html"))
 }
 
-// BossesCreate default implementation.
+// BossesCreate responds to POST.
 func BossesCreate(c buffalo.Context) error {
 	boss := &models.Boss{}
 	if err := c.Bind(boss); err != nil {
 		return err
 	}
+
+	newContract := boss.CreateContract
 
 	tx := c.Value("tx").(*pop.Connection)
 	// Validate the data from the html form.
@@ -50,7 +52,23 @@ func BossesCreate(c buffalo.Context) error {
 		return c.Render(422, r.HTML("bosses/new.html"))
 	}
 	c.Flash().Add("success", "Boss was created successfully")
-	return c.Redirect(303, "/bosses/%d", boss.ID)
+
+	if newContract == false {
+		return c.Redirect(303, "/bosses/%d", boss.ID)
+	}
+
+	uid := c.Session().Get("current_user_id")
+	if uid == nil {
+		return errors.WithStack(err)
+	}
+
+	u := &models.User{}
+	err = tx.Find(u, uid)
+	if err != nil {
+		return errors.WithStack(err)
+	}
+	c.Flash().Add("warning", "Set a rate for this contract")
+	return c.Redirect(303, "/users/%s/contracts/new?bid=%d", u.ID, boss.ID)
 }
 
 // BossesShow default implementation.

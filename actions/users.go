@@ -157,8 +157,23 @@ func UsersContractsNew(c buffalo.Context) error {
 		c.Flash().Add("warning", "No bosses found.")
 	}
 
+	// Pass empty struct to form; preset value below.
+	contract := &models.Contract{}
+
+	// Check preset boss if passed, i.e. from create-boss route.
+	bossID := c.Param("bid")
+	if bossID != "" {
+		boss := &models.Boss{}
+		err = tx.Find(boss, bossID)
+		if err != nil {
+			fmt.Printf("Cannot find boss %v", err)
+		}
+		contract.Boss = boss
+		contract.BossID = boss.ID
+	}
+
 	c.Set("user", user)
-	c.Set("contract", &models.Contract{})
+	c.Set("contract", contract)
 	c.Set("bosses", bosses)
 	return c.Render(http.StatusOK, r.HTML("users/contracts_new.html"))
 }

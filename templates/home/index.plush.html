@@ -1,0 +1,10 @@
+<div class="row">
+
+  <%= if (!current_user) { %>
+    <div class="col-md-8 offset-md-2 jumbotron">
+      <h1>Log In</h1>
+      <%= partial("auth/auth_new.html", {user: new_user}) %>
+    </div>
+  <% } %>
+
+</div>

@@ -10,11 +10,12 @@ import (
 
 // Boss is used by pop to map your bosses database table to your go code.
 type Boss struct {
-	ID        int        `json:"id" db:"id"`
-	Name      string     `json:"name" db:"name"`
-	Contracts []Contract `json:"contracts,omitempty" has_many:"contracts"`
-	CreatedAt time.Time  `json:"created_at" db:"created_at"`
-	UpdatedAt time.Time  `json:"updated_at" db:"updated_at"`
+	ID             int        `json:"id" db:"id"`
+	Name           string     `json:"name" db:"name"`
+	Contracts      []Contract `json:"contracts,omitempty" has_many:"contracts"`
+	CreateContract bool       `json:"-" db:"-"`
+	CreatedAt      time.Time  `json:"created_at" db:"created_at"`
+	UpdatedAt      time.Time  `json:"updated_at" db:"updated_at"`
 }
 
 // String is not required by pop and may be deleted
