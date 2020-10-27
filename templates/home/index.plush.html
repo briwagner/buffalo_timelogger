@@ -4,6 +4,12 @@
     <div class="col-md-8 offset-md-2 jumbotron">
       <h1>Log In</h1>
       <%= partial("auth/auth_new.html", {user: new_user}) %>
+
+      <div class="row  mt-4">
+        <%= linkTo(usersPath(), {}) { %>
+          Create a new account
+        <% } %>
+      </div>
     </div>
   <% } %>
 
