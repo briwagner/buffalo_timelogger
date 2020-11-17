@@ -3,12 +3,14 @@ package actions
 import (
 	"buftester/models"
 	"fmt"
+	"log"
 	"net/http"
 	"sort"
 	"strconv"
 	"time"
 
 	"github.com/gobuffalo/buffalo"
+	"github.com/gobuffalo/events"
 	"github.com/gobuffalo/pop/v5"
 	"github.com/pkg/errors"
 )
@@ -95,6 +97,16 @@ func UsersCreate(c buffalo.Context) error {
 		c.Set("errors", verrs)
 		return c.Render(200, r.HTML("users/new.html"))
 	}
+
+	// Fire event for new user
+	e := events.Event{
+		Kind:    "buftester:user:create",
+		Message: fmt.Sprintf("New user created: %s", u.Email),
+	}
+	if err := events.Emit(e); err != nil {
+		log.Printf("Failed to emit %v", err)
+	}
+
 	c.Flash().Add("success", "User was created successfully")
 	// return c.Redirect(303, "/users/%s", u.ID)
 	// User not logged in yet.

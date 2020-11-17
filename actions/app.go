@@ -1,8 +1,12 @@
 package actions
 
 import (
+	"log"
+	"reflect"
+
 	"github.com/gobuffalo/buffalo"
 	"github.com/gobuffalo/envy"
+	"github.com/gobuffalo/events"
 	forcessl "github.com/gobuffalo/mw-forcessl"
 	paramlogger "github.com/gobuffalo/mw-paramlogger"
 	"github.com/unrolled/secure"
@@ -115,5 +119,50 @@ func forceSSL() buffalo.MiddlewareFunc {
 	return forcessl.Middleware(secure.Options{
 		SSLRedirect:     ENV == "production",
 		SSLProxyHeaders: map[string]string{"X-Forwarded-Proto": "https"},
+	})
+}
+
+// Register event listeners.
+func init() {
+	events.Listen(func(e events.Event) {
+		if e.Kind == buffalo.EvtRouteStarted {
+			// Assert to proper type, else it's viewed as interface{}.
+			route, err := e.Payload.Pluck("route")
+			if err != nil {
+				return
+			}
+			r := route.(buffalo.RouteInfo)
+			if r.PathName == "newBossesPath" {
+				log.Printf("User hitting the Bosses Create path %s", r.PathName)
+			}
+		}
+
+		// Context will be present here.
+		if e.Kind == buffalo.EvtRouteFinished {
+			ctx, err := e.Payload.Pluck("context")
+			if err != nil {
+				return
+			}
+			context := ctx.(buffalo.Context)
+			u := context.Value("current_user")
+			if u != nil {
+				user, ok := u.(*models.User)
+				if !ok {
+					log.Println("Cannot convert %s", reflect.TypeOf(u))
+					return
+				}
+				route, err := e.Payload.Pluck("route")
+				if err != nil {
+					return
+				}
+				r := route.(buffalo.RouteInfo)
+				log.Printf("%s route finished %+v", r.PathName, user.Email)
+			}
+		}
+
+		// Custom event.
+		if e.Kind == "buftester:user:create" {
+			log.Printf("New User: %s", e.Message)
+		}
 	})
 }
