@@ -126,12 +126,15 @@ func forceSSL() buffalo.MiddlewareFunc {
 func init() {
 	events.Listen(func(e events.Event) {
 		if e.Kind == buffalo.EvtRouteStarted {
-			// Assert to proper type, else it's viewed as interface{}.
 			route, err := e.Payload.Pluck("route")
 			if err != nil {
 				return
 			}
-			r := route.(buffalo.RouteInfo)
+			// Assert to proper type, else it's viewed as interface{}.
+			r, ok := route.(buffalo.RouteInfo)
+			if !ok {
+				return
+			}
 			if r.PathName == "newBossesPath" {
 				log.Printf("User hitting the Bosses Create path %s", r.PathName)
 			}
@@ -148,7 +151,7 @@ func init() {
 			if u != nil {
 				user, ok := u.(*models.User)
 				if !ok {
-					log.Println("Cannot convert %s", reflect.TypeOf(u))
+					log.Printf("Cannot convert %s\n", reflect.TypeOf(u).String())
 					return
 				}
 				route, err := e.Payload.Pluck("route")
@@ -156,7 +159,7 @@ func init() {
 					return
 				}
 				r := route.(buffalo.RouteInfo)
-				log.Printf("%s route finished %+v", r.PathName, user.Email)
+				log.Printf("%s route finished %+v\n", r.PathName, user.Email)
 			}
 		}
 
