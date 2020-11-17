@@ -96,7 +96,9 @@ func UsersCreate(c buffalo.Context) error {
 		return c.Render(200, r.HTML("users/new.html"))
 	}
 	c.Flash().Add("success", "User was created successfully")
-	return c.Redirect(303, "/users/%s", u.ID)
+	// return c.Redirect(303, "/users/%s", u.ID)
+	// User not logged in yet.
+	return c.Redirect(303, "/")
 }
 
 // UsersShow renders one user.
