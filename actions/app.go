@@ -81,10 +81,10 @@ func App() *buffalo.App {
 		app.GET("/users/{user_id}/contracts/new", UsersContractsNew)
 		app.GET("/users/{user_id}/contracts/{contract_id}", UsersContractShow)
 
-		app.GET("/bosses/index", BossesIndex)
-		app.GET("/bosses/new", BossesNew)
-		app.POST("/bosses/create", BossesCreate)
-		app.GET("/bosses/{boss_id}", BossesShow)
+		app.GET("/bosses/index", Authorize(BossesIndex))
+		app.GET("/bosses/new", Authorize(BossesNew))
+		app.POST("/bosses/create", Authorize(BossesCreate))
+		app.GET("/bosses/{boss_id}", Authorize(BossesShow))
 
 		app.POST("/users/{user_id}/contracts{contract_id}/task/create", UserTaskCreate)
 		app.GET("/tasks/{task_id}", TasksShow)
