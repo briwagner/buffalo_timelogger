@@ -63,7 +63,10 @@ func App() *buffalo.App {
 		// Setup and use translations:
 		app.Use(translations())
 		app.Use(SetCurrentUser)
+
+		// Prefer using groups to enable middleware that way.
 		// app.Use(Authorize)
+		// app.Middleware.Skip(Authorize, HomeHandler, UsersNew, UsersCreate, AuthNew, AuthCreate)
 
 		app.GET("/", HomeHandler)
 
@@ -73,25 +76,32 @@ func App() *buffalo.App {
 
 		app.GET("/users", UsersNew)
 		app.POST("/users", UsersCreate)
+
 		app.GET("/users/index", Authorize(UsersIndex))
 		app.GET("/users/{user_id}", Authorize(IsOwner(UsersShow)))
 
-		app.GET("/users/{user_id}/contracts", UsersContractsIndex)
-		app.POST("/users/{user_id}/contracts", UsersContractCreate)
-		app.GET("/users/{user_id}/contracts/new", UsersContractsNew)
-		app.GET("/users/{user_id}/contracts/{contract_id}", UsersContractShow)
+		c := app.Group("/users")
+		c.GET("/{user_id}/contracts", UsersContractsIndex)
+		c.POST("/{user_id}/contracts", UsersContractCreate)
+		c.GET("/{user_id}/contracts/new", UsersContractsNew)
+		c.GET("/{user_id}/contracts/{contract_id}", UsersContractShow)
+		c.Use(Authorize)
 
-		app.GET("/bosses/index", Authorize(BossesIndex))
-		app.GET("/bosses/new", Authorize(BossesNew))
-		app.POST("/bosses/create", Authorize(BossesCreate))
-		app.GET("/bosses/{boss_id}", Authorize(BossesShow))
+		b := app.Group("/bosses")
+		b.GET("/index", BossesIndex)
+		b.GET("/new", BossesNew)
+		b.POST("/create", BossesCreate)
+		b.GET("/{boss_id}", BossesShow)
+		b.Use(Authorize)
 
-		app.POST("/users/{user_id}/contracts{contract_id}/task/create", UserTaskCreate)
-		app.GET("/tasks/{task_id}", TasksShow)
-		app.GET("/tasks/{task_id}/edit", TasksEdit)
-		app.POST("/tasks/{task_id}/edit", TasksUpdate)
+		app.POST("/users/{user_id}/contracts{contract_id}/task/create", Authorize(UserTaskCreate))
 
-		app.Middleware.Skip(Authorize, HomeHandler, UsersNew, UsersCreate, AuthNew, AuthCreate)
+		t := app.Group("/tasks")
+		t.GET("/{task_id}", TasksShow)
+		t.GET("/{task_id}/edit", TasksEdit)
+		t.POST("/{task_id}/edit", TasksUpdate)
+		t.Use(Authorize)
+
 		app.ServeFiles("/", assetsBox) // serve files from the public directory
 	}
 
