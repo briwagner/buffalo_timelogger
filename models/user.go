@@ -61,9 +61,28 @@ func (u *User) IsAdmin() bool {
 	return false
 }
 
+// UserAuthenticate checks password against storage
+func (u *User) Authenticate() bool {
+	err := bcrypt.CompareHashAndPassword([]byte(u.PasswordHash), []byte(u.Password))
+	if err != nil {
+		return false
+	}
+	return true
+}
+
 // MakeAdmin changes user role.
 func (u *User) SetRole(r string) {
 	u.Roles = r
+}
+
+// UpdatePassword wraps the hashing
+func (u *User) UpdatePassword(tx *pop.Connection) (*validate.Errors, error) {
+	ph, err := bcrypt.GenerateFromPassword([]byte(u.Password), bcrypt.DefaultCost)
+	if err != nil {
+		return nil, errors.WithStack(err)
+	}
+	u.PasswordHash = string(ph)
+	return tx.ValidateAndUpdate(u)
 }
 
 // Users is not required by pop and may be deleted

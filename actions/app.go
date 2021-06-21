@@ -80,6 +80,7 @@ func App() *buffalo.App {
 		app.GET("/users/{user_id}", Authorize(IsOwner(UsersShow)))
 
 		c := app.Group("/users")
+		c.POST("/{user_id}", UsersUpdate)
 		c.GET("/{user_id}/contracts", UsersContractsIndex)
 		c.POST("/{user_id}/contracts", UsersContractCreate)
 		c.GET("/{user_id}/contracts/new", UsersContractsNew)

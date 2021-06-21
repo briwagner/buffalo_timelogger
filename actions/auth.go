@@ -10,7 +10,6 @@ import (
 	"github.com/gobuffalo/pop/v5"
 	"github.com/gobuffalo/validate/v3"
 	"github.com/pkg/errors"
-	"golang.org/x/crypto/bcrypt"
 )
 
 // AnonOnly rejects logged-in users.
@@ -68,8 +67,7 @@ func AuthCreate(c buffalo.Context) error {
 	}
 
 	// confirm that the given password matches the hashed password from the db
-	err = bcrypt.CompareHashAndPassword([]byte(u.PasswordHash), []byte(u.Password))
-	if err != nil {
+	if u.Authenticate() != true {
 		return bad()
 	}
 	c.Session().Set("current_user_id", u.ID)
@@ -78,7 +76,7 @@ func AuthCreate(c buffalo.Context) error {
 	return c.Redirect(302, "/users/%s", u.ID)
 }
 
-// AuthDestroy clears the session and logs a user out
+// AuthDestroy clears the user session
 func AuthDestroy(c buffalo.Context) error {
 	c.Session().Clear()
 	c.Flash().Add("success", "You have been logged out!")
