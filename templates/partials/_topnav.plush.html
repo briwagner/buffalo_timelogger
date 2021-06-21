@@ -7,7 +7,6 @@
   <li class="nav-item"><a href="/users" class='<%= isActiveNav("usersPath", cp) %>'>Create User</a></li>  -->
   <%= if (current_user) { %>
     <li class="nav-item"><a href="/bosses/index" class='<%= isActiveNav("bossesIndexPath", cp) %>'>Bosses</a></li>
-    <li class="nav-item"><a href="/bosses/new" class='<%= isActiveNav("newBossesPath", cp) %>'>Create Boss</a></li>
     <li class="nav-item">
       <%= linkTo(userPath({user_id: current_user.ID}), {class: isActiveNav("userPath", cp)}) { %>My Account<% } %>
     </li>

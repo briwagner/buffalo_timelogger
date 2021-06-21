@@ -5,9 +5,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
-	"sort"
 	"strconv"
-	"time"
 
 	"github.com/gobuffalo/buffalo"
 	"github.com/gobuffalo/events"
@@ -131,7 +129,6 @@ func UsersShow(c buffalo.Context) error {
 // UsersContractsIndex gets all contracts for the User.
 func UsersContractsIndex(c buffalo.Context) error {
 	tx := c.Value("tx").(*pop.Connection)
-	contracts := []models.Contract{}
 
 	// Try to load user first.
 	user := &models.User{}
@@ -142,13 +139,12 @@ func UsersContractsIndex(c buffalo.Context) error {
 	}
 
 	// Load contracts.
-	err = tx.Where("user_id = ?", user.ID).Eager("Boss").All(&contracts)
+	err = user.GetContracts(tx)
 	if err != nil {
 		c.Flash().Add("warning", "No contracts found.")
 	}
 
 	c.Set("current_user", user)
-	c.Set("contracts", contracts)
 	return c.Render(http.StatusOK, r.HTML("users/contracts_index.html"))
 }
 
@@ -262,21 +258,17 @@ func UsersContractShow(c buffalo.Context) error {
 
 	// Load contract
 	contract := &models.Contract{}
-	err = tx.Eager().Find(contract, c.Param("contract_id"))
+	// err = tx.Eager().Find(contract, c.Param("contract_id"))
+	contract.LoadContract(tx, c.Param("contract_id"))
 	if err != nil {
 		c.Flash().Add("warning", "Cannot find that contract.")
 		return c.Redirect(307, "/users/%s", user.ID)
 	}
 	c.Set("contract", contract)
 
-	sort.SliceStable(contract.Tasks, func(i, j int) bool {
-		return contract.Tasks[i].StartTime.Before(contract.Tasks[j].StartTime)
-	})
-
 	// Create empty task; set visible dates to now.
 	task := &models.Task{}
-	task.StartTime = time.Now()
-	task.EndTime = time.Now()
+	_ = task.CreateNew()
 	c.Set("task", task)
 
 	return c.Render(http.StatusOK, r.HTML("users/contract_show.html"))

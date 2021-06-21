@@ -105,3 +105,15 @@ func (u *User) ValidateCreate(tx *pop.Connection) (*validate.Errors, error) {
 func (u *User) ValidateUpdate(tx *pop.Connection) (*validate.Errors, error) {
 	return validate.NewErrors(), nil
 }
+
+// GetContracts
+func (u *User) GetContracts(tx *pop.Connection) error {
+	contracts := []Contract{}
+	err := tx.Where("user_id = ?", u.ID).Eager("Boss").All(&contracts)
+	if err != nil {
+		return err
+	}
+
+	u.Contracts = contracts
+	return nil
+}

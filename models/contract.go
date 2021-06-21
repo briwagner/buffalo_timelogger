@@ -2,6 +2,7 @@ package models
 
 import (
 	"encoding/json"
+	"sort"
 	"time"
 
 	"github.com/gobuffalo/pop/v5"
@@ -59,4 +60,18 @@ func (c *Contract) ValidateCreate(tx *pop.Connection) (*validate.Errors, error) 
 // This method is not required and may be deleted.
 func (c *Contract) ValidateUpdate(tx *pop.Connection) (*validate.Errors, error) {
 	return validate.NewErrors(), nil
+}
+
+// LoadContract gets a contract with sorted tasks
+func (c *Contract) LoadContract(tx *pop.Connection, cid string) error {
+	err := tx.Eager().Find(c, cid)
+	if err != nil {
+		return err
+	}
+
+	sort.SliceStable(c.Tasks, func(i, j int) bool {
+		return c.Tasks[i].StartTime.Before(c.Tasks[j].StartTime)
+	})
+
+	return nil
 }

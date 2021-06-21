@@ -1,7 +1,7 @@
 <h1><%= current_user.FullName() %> Jobs</h1>
 
 <ul class="list-group list-group-flush">
-  <%= for (c) in contracts { %>
+  <%= for (c) in current_user.Contracts { %>
     <li class="list-group-item">
       <a href="#"><%= c.Boss.Name %></a>
     </li>

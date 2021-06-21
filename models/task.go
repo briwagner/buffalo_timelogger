@@ -69,3 +69,10 @@ func (t *Task) ValidateUpdate(tx *pop.Connection) (*validate.Errors, error) {
 	// TODO: enforce no zero duration.
 	return validate.NewErrors(), nil
 }
+
+// CreateNew generates a new task setting time to Now
+func (t *Task) CreateNew() error {
+	t.StartTime = time.Now()
+	t.EndTime = time.Now()
+	return nil
+}
