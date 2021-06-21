@@ -3,7 +3,7 @@
 <ul class="list-group list-group-flush">
   <%= for (u) in users { %>
     <li class="list-group-item">
-      <a href="/users/<%= u.ID %>"><%= u.FullName() %></a>
+      <a href="/admin/users/<%= u.ID %>"><%= u.FullName() %></a>
     </li>
   <% } %>
 </ul>

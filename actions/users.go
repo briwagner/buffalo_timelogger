@@ -56,20 +56,6 @@ func IsOwner(next buffalo.Handler) buffalo.Handler {
 	}
 }
 
-// UsersIndex default implementation.
-func UsersIndex(c buffalo.Context) error {
-	tx := c.Value("tx").(*pop.Connection)
-	users := []models.User{}
-
-	err := tx.All(&users)
-	if err != nil {
-		c.Flash().Add("warning", "No users found.")
-	}
-
-	c.Set("users", users)
-	return c.Render(http.StatusOK, r.HTML("users/index.html"))
-}
-
 // UsersNew returns a form to create new user.
 func UsersNew(c buffalo.Context) error {
 	c.Set("user", &models.User{})
@@ -122,7 +108,7 @@ func UsersShow(c buffalo.Context) error {
 		return c.Redirect(307, "/")
 	}
 
-	c.Set("current_user", user)
+	c.Set("user", user)
 	return c.Render(http.StatusOK, r.HTML("users/show.html"))
 }
 

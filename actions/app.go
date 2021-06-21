@@ -74,10 +74,9 @@ func App() *buffalo.App {
 		app.POST("/signin", AuthCreate)
 		app.DELETE("/signout", AuthDestroy)
 
-		app.GET("/users", UsersNew)
+		app.GET("/users", AnonOnly(UsersNew))
 		app.POST("/users", UsersCreate)
 
-		app.GET("/users/index", Authorize(UsersIndex))
 		app.GET("/users/{user_id}", Authorize(IsOwner(UsersShow)))
 
 		c := app.Group("/users")
@@ -101,6 +100,14 @@ func App() *buffalo.App {
 		t.GET("/{task_id}/edit", TasksEdit)
 		t.POST("/{task_id}/edit", TasksUpdate)
 		t.Use(Authorize)
+
+		admin := app.Group("/admin")
+		admin.GET("/users", AdminUsersIndex)
+		admin.GET("/users/{user_id}", AdminUserShow)
+		admin.POST("/users/{user_id}", AdminUserUpdate)
+		admin.Use(Authorize)
+		admin.Use(IsAdmin)
+		admin.Use(SetCurrentUser)
 
 		app.ServeFiles("/", assetsBox) // serve files from the public directory
 	}

@@ -24,10 +24,11 @@ type User struct {
 	PasswordHash         string     `json:"-" db:"password_hash"`
 	Password             string     `json:"-" db:"-"`
 	PasswordConfirmation string     `json:"-" db:"-"`
+	Roles                string     `json:"roles" db:"roles"`
 }
 
 // String is not required by pop and may be deleted
-func (u User) String() string {
+func (u *User) String() string {
 	ju, _ := json.Marshal(u)
 	return string(ju)
 }
@@ -45,11 +46,24 @@ func (u *User) Create(tx *pop.Connection) (*validate.Errors, error) {
 }
 
 // FullName prints the first and last names.
-func (u User) FullName() string {
+func (u *User) FullName() string {
 	if u.FirstName == "" && u.LastName == "" {
 		return "User has no name"
 	}
 	return fmt.Sprintf("%s %s", u.FirstName, u.LastName)
+}
+
+// IsAdmin checks the user role.
+func (u *User) IsAdmin() bool {
+	if u.Roles == "admin" {
+		return true
+	}
+	return false
+}
+
+// MakeAdmin changes user role.
+func (u *User) SetRole(r string) {
+	u.Roles = r
 }
 
 // Users is not required by pop and may be deleted

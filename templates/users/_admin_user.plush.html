@@ -1,0 +1,14 @@
+<div class="jumbotron">
+  <p><strong>Manage User: <%= user.FullName() %></strong></p>
+  <%= form({action: adminUserPath({user_id: user.ID})}) { %>
+    <div class="form-group">
+      <%= if (user.IsAdmin()) { %>
+        <input type="checkbox" id="AdminRole" name="AdminRole" value="set_admin" checked>
+      <% } else { %>
+        <input type="checkbox" id="AdminRole" name="AdminRole" value="set_admin">
+      <% } %>
+      <label for="AdminRole">Administrator role</label>
+    </div>
+    <button class="btn btn-success">Update</button>
+  <% } %>
+</div>

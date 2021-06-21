@@ -1,17 +1,24 @@
-<h1><%= current_user.FullName() %></h1>
-<p><%= current_user.Email %></p>
+<h1><%= user.FullName() %></h1>
+<p><%= user.Email %></p>
+<%= if (current_user.IsAdmin() && user.IsAdmin()) { %>
+  <p class="badge badge-secondary">Admin</p>
+<% } %>
+
+<%= if (current_user.IsAdmin()) { %>
+  <%= partial("users/admin_user") %>
+<% } %>
 
 <h2>Contracts</h2>
 <ul class="list-group list-group-flush">
-  <%= for (c) in current_user.Contracts { %>
+  <%= for (c) in user.Contracts { %>
     <li class="list-group-item">
-      <a href="/users/<%= current_user.ID %>/contracts/<%= c.ID %>"><%= c.Boss.Name %></a>
+      <a href="/users/<%= user.ID %>/contracts/<%= c.ID %>"><%= c.Boss.Name %></a>
     </li>
   <% } %>
 </ul>
 
 <div class="footer-links">
-  <%= linkTo(newUserContractsPath({user_id: current_user.ID}), {class: "btn btn-secondary row-end"}) { %>
+  <%= linkTo(newUserContractsPath({user_id: user.ID}), {class: "btn btn-secondary row-end"}) { %>
     Add Contract
   <% } %>
 </div>
