@@ -1,8 +1,8 @@
 <h1><%= user.FullName() %></h1>
-<p><%= user.Email %></p>
 <%= if (current_user.IsAdmin() && user.IsAdmin()) { %>
-  <p class="badge badge-secondary">Admin</p>
+  <span class="badge badge-secondary">Admin</span>
 <% } %>
+<p><%= user.Email %></p>
 
 <%= if (current_user.IsAdmin()) { %>
   <%= partial("users/admin_user") %>

@@ -84,9 +84,7 @@ func AdminUserUpdate(c buffalo.Context) error {
 	} else if v[0] == "set_admin" {
 		user.SetRole("admin")
 	}
-
 	tx.Update(user)
 
-	c.Set("user", user)
-	return c.Render(http.StatusOK, r.HTML("users/show.html"))
+	return c.Redirect(303, "/admin/users/%s", user.ID)
 }
