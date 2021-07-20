@@ -9,6 +9,9 @@
 <% } %>
 
 <h2>Contracts</h2>
+<%= if (len(user.Contracts) == 0) { %>
+  <p>No contracts created.</p>
+<% } %>
 <ul class="list-group list-group-flush">
   <%= for (c) in user.Contracts { %>
     <li class="list-group-item">

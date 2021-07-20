@@ -4,6 +4,9 @@
   <%= for (u) in users { %>
     <li class="list-group-item">
       <a href="/admin/users/<%= u.ID %>"><%= u.FullName() %></a>
+      <%= if (u.IsAdmin()) { %>
+        <strong>(admin)</strong>
+      <% } %>
     </li>
   <% } %>
 </ul>

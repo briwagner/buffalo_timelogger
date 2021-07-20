@@ -10,7 +10,7 @@ import (
 	"github.com/gofrs/uuid"
 )
 
-// Contract is used by pop to map your contracts database table to your go code.
+// Contract is a User's record for a specific boss.
 type Contract struct {
 	ID        int       `json:"id" db:"id"`
 	Rate      int       `json:"rate" db:"rate"`
@@ -23,29 +23,19 @@ type Contract struct {
 	UpdatedAt time.Time `json:"updated_at" db:"updated_at"`
 }
 
-// String is not required by pop and may be deleted
 func (c Contract) String() string {
 	jc, _ := json.Marshal(c)
 	return string(jc)
 }
 
-// Contracts is not required by pop and may be deleted
 type Contracts []Contract
 
-// String is not required by pop and may be deleted
-func (c Contracts) String() string {
-	jc, _ := json.Marshal(c)
-	return string(jc)
-}
-
 // Validate gets run every time you call a "pop.Validate*" (pop.ValidateAndSave, pop.ValidateAndCreate, pop.ValidateAndUpdate) method.
-// This method is not required and may be deleted.
 func (c *Contract) Validate(tx *pop.Connection) (*validate.Errors, error) {
 	return validate.NewErrors(), nil
 }
 
 // ValidateCreate gets run every time you call "pop.ValidateAndCreate" method.
-// This method is not required and may be deleted.
 func (c *Contract) ValidateCreate(tx *pop.Connection) (*validate.Errors, error) {
 	if c.CreatedAt.IsZero() {
 		c.CreatedAt = time.Now()
@@ -57,7 +47,6 @@ func (c *Contract) ValidateCreate(tx *pop.Connection) (*validate.Errors, error) 
 }
 
 // ValidateUpdate gets run every time you call "pop.ValidateAndUpdate" method.
-// This method is not required and may be deleted.
 func (c *Contract) ValidateUpdate(tx *pop.Connection) (*validate.Errors, error) {
 	return validate.NewErrors(), nil
 }
