@@ -1,0 +1,7 @@
+<ul class="list-group list-group-flush">
+  <%= for (c) in user.Contracts { %>
+    <li class="list-group-item">
+      <a href="/users/<%= user.ID %>/contracts/<%= c.ID %>"><%= c.Boss.Name %></a>
+    </li>
+  <% } %>
+</ul>

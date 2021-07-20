@@ -11,14 +11,9 @@
 <h2>Contracts</h2>
 <%= if (len(user.Contracts) == 0) { %>
   <p>No contracts created.</p>
+<% } else { %>
+  <%= partial("contracts/list") %>
 <% } %>
-<ul class="list-group list-group-flush">
-  <%= for (c) in user.Contracts { %>
-    <li class="list-group-item">
-      <a href="/users/<%= user.ID %>/contracts/<%= c.ID %>"><%= c.Boss.Name %></a>
-    </li>
-  <% } %>
-</ul>
 
 <div class="footer-links">
   <%= linkTo(newUserContractsPath({user_id: user.ID}), {class: "btn btn-secondary row-end"}) { %>

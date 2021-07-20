@@ -20,14 +20,9 @@
       <%= if (len(current_user.Contracts) == 0) { %>
         <p>No contracts created.</p>
       <% } else { %>
-        <ul>
-          <%= for (contract) in current_user.Contracts { %>
-            <li><%= linkTo(userContractPath({user_id: current_user.ID, contract_id: contract.ID})) { %>
-              <%= contract.Boss.Name %> contract
-              <% } %>
-            </li>
-          <% } %>
-        </ul>
+        <h2>Contracts</h2>
+        <% let user = current_user %>
+        <%= partial("contracts/list") %>
       <% } %>
     </div>
   <% } %>
