@@ -197,6 +197,6 @@ func UserTaskCreate(c buffalo.Context) error {
 		c.Set("errors", verrs)
 		return c.Render(422, r.HTML("users/contract_show.html"))
 	}
-	c.Flash().Add("success", "Task created successfully")
+	c.Flash().Add("success", "New task created")
 	return c.Redirect(303, "/users/%s/contracts/%s", user.ID, strconv.Itoa(contract.ID))
 }

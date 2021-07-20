@@ -2,21 +2,39 @@ package actions
 
 import (
 	"buftester/models"
+	"log"
 	"net/http"
+	"strconv"
 
 	"github.com/gobuffalo/buffalo"
 	"github.com/gobuffalo/pop/v5"
 	"github.com/pkg/errors"
 )
 
-// BossesIndex default implementation.
+// BossesIndex shows all bosses with a param pager.
 func BossesIndex(c buffalo.Context) error {
 	tx := c.Value("tx").(*pop.Connection)
 	bosses := []models.Boss{}
 
-	err := tx.All(&bosses)
+	page := 1
+	if c.Param("page") != "" {
+		p, err := strconv.Atoi(c.Param("page"))
+		if err != nil {
+			log.Printf("Cannot parse pager param")
+		} else {
+			page = p
+		}
+	}
+
+	q := tx.Paginate(page, 12)
+	err := q.All(&bosses)
 	if err != nil {
 		c.Flash().Add("warning", "No bosses found.")
+	}
+
+	// Handle possible empty result from pager.
+	if page > 1 && len(bosses) == 0 {
+		c.Flash().Add("warning", "No bosses found. Try a lower page number.")
 	}
 
 	c.Set("bosses", bosses)
