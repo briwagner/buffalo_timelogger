@@ -136,7 +136,7 @@ func UsersShow(c buffalo.Context) error {
 	tx := c.Value("tx").(*pop.Connection)
 
 	user := &models.User{}
-	err := tx.Eager("Contracts").Find(user, c.Param("user_id"))
+	err := tx.Eager("Contracts.Boss").Find(user, c.Param("user_id"))
 	if err != nil {
 		c.Flash().Add("warning", "Cannot find that user.")
 		return c.Redirect(307, "/")

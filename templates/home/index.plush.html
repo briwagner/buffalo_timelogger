@@ -11,6 +11,25 @@
         <% } %>
       </div>
     </div>
+  <% } else { %>
+    <div class="col-md-8 offset-md-2 jumbotron">
+      <h1>Welcome <%= current_user.FullName() %></h1>
+    </div>
+
+    <div class="col-md-8 offset-md-2">
+      <%= if (len(current_user.Contracts) == 0) { %>
+        <p>No contracts created.</p>
+      <% } else { %>
+        <ul>
+          <%= for (contract) in current_user.Contracts { %>
+            <li><%= linkTo(userContractPath({user_id: current_user.ID, contract_id: contract.ID})) { %>
+              <%= contract.Boss.Name %> contract
+              <% } %>
+            </li>
+          <% } %>
+        </ul>
+      <% } %>
+    </div>
   <% } %>
 
 </div>
