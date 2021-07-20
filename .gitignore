@@ -1,6 +1,7 @@
 vendor/
 **/*.log
 **/*.sqlite
+**/*.sql
 .idea/
 bin/
 tmp/
