@@ -15,8 +15,11 @@
   <%= partial("contracts/list") %>
 <% } %>
 
-<div class="footer-links">
-  <%= linkTo(newUserContractsPath({user_id: user.ID}), {class: "btn btn-secondary row-end"}) { %>
+<div class="footer-links row-end">
+  <%= linkTo(userContractsPath({user_id: user.ID}), {class: "btn btn-light btn-link btn-m-05"}) { %>
+    View all
+  <% } %>
+  <%= linkTo(newUserContractsPath({user_id: user.ID}), {class: "btn btn-secondary"}) { %>
     Add Contract
   <% } %>
 </div>

@@ -21,12 +21,20 @@ div.footer-links {
   flex-direction: row;
   margin: 1em 0;
 
-  .row-end {
-    margin-left: auto;
+  &.row-end {
+    justify-content: flex-end;
   }
 }
 
 .jumbotron .row {
   margin-left: 0;
   margin-right: 0;
+}
+
+.btn-m-05 {
+  margin: 0 0.5em;
+}
+
+.btn-m-10 {
+  margin: 0 1em;
 }

@@ -1,6 +1,6 @@
 <h1><%= current_user.FullName() %> for <%= contract.Boss.Name %></h1>
 
-<%= linkTo(userPath({user_id: current_user.ID})) { %>All Contracts <% } %>
+<%= linkTo(userContractsPath({user_id: current_user.ID})) { %><< All Contracts <% } %>
 
 <div class="worklog">
   <h2>Worklog</h2>

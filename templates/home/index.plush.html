@@ -5,7 +5,7 @@
       <h1>Log In</h1>
       <%= partial("auth/auth_new.html", {user: new_user}) %>
 
-      <div class="row  mt-4">
+      <div class="row mt-4">
         <%= linkTo(usersPath(), {}) { %>
           Create a new account
         <% } %>
@@ -16,13 +16,18 @@
       <h1>Welcome <%= current_user.FullName() %></h1>
     </div>
 
-    <div class="col-md-8 offset-md-2">
+    <div class="col-md-12">
       <%= if (len(current_user.Contracts) == 0) { %>
         <p>No contracts created.</p>
       <% } else { %>
         <h2>Contracts</h2>
         <% let user = current_user %>
         <%= partial("contracts/list") %>
+        <div class="footer-links row-end">
+          <%= linkTo(userContractsPath({user_id: user.ID}), {class: "btn btn-primary"}) { %>
+            View all
+          <% } %>
+        </div>
       <% } %>
     </div>
   <% } %>
