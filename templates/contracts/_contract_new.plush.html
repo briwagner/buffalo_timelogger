@@ -1,5 +1,5 @@
 <div>
-  <%= f.InputTag("Rate") %>
-  <%= f.SelectTag("BossID", {options: bosses}) %>
+  <%= f.InputTag("Rate", {required: true}) %>
+  <%= f.SelectTag("BossID", {options: bosses, required: true, value: contract.BossID}) %>
   <button class="btn btn-success">Create</button>
 </div>

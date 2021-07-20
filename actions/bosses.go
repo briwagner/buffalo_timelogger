@@ -41,13 +41,13 @@ func BossesIndex(c buffalo.Context) error {
 	return c.Render(http.StatusOK, r.HTML("bosses/index.html"))
 }
 
-// BossesNew default implementation.
+// BossesNew shows the form to create a new Boxx.
 func BossesNew(c buffalo.Context) error {
 	c.Set("boss", &models.Boss{})
 	return c.Render(http.StatusOK, r.HTML("bosses/new.html"))
 }
 
-// BossesCreate responds to POST.
+// BossesCreate responds to POST to create a new Boss.
 func BossesCreate(c buffalo.Context) error {
 	boss := &models.Boss{}
 	if err := c.Bind(boss); err != nil {
@@ -71,7 +71,7 @@ func BossesCreate(c buffalo.Context) error {
 	}
 	c.Flash().Add("success", "Boss was created successfully")
 
-	if newContract == false {
+	if !newContract {
 		return c.Redirect(303, "/bosses/%d", boss.ID)
 	}
 
@@ -89,7 +89,7 @@ func BossesCreate(c buffalo.Context) error {
 	return c.Redirect(303, "/users/%s/contracts/new?bid=%d", u.ID, boss.ID)
 }
 
-// BossesShow default implementation.
+// BossesShow returns detail for a single Boss.
 func BossesShow(c buffalo.Context) error {
 	tx := c.Value("tx").(*pop.Connection)
 
@@ -99,6 +99,9 @@ func BossesShow(c buffalo.Context) error {
 		c.Flash().Add("warning", "Cannot find that boss.")
 		return c.Redirect(307, "/")
 	}
+
+	user := c.Value("current_user").(*models.User)
+	c.Set("user", user)
 	c.Set("boss", boss)
 	return c.Render(http.StatusOK, r.HTML("bosses/show.html"))
 }

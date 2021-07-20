@@ -48,23 +48,29 @@ func UsersContractsNew(c buffalo.Context) error {
 	// Load bosses for select.
 	bosses := []models.Boss{}
 	err = tx.All(&bosses)
-	if err != nil {
+	if err != nil || len(bosses) == 0 {
 		c.Flash().Add("warning", "No bosses found.")
+		return c.Redirect(307, "/bosses/index")
 	}
 
 	// Pass empty struct to form; preset value below.
 	contract := &models.Contract{}
 
-	// Check preset boss if passed, i.e. from create-boss route.
+	// Provide default value on select, if passed via query param.
 	bossID := c.Param("bid")
 	if bossID != "" {
 		boss := &models.Boss{}
 		err = tx.Find(boss, bossID)
 		if err != nil {
 			fmt.Printf("Cannot find boss %v", err)
+		} else {
+			contract.Boss = boss
+			contract.BossID = boss.ID
 		}
-		contract.Boss = boss
-		contract.BossID = boss.ID
+	}
+	// No default provided/found.
+	if contract.BossID == 0 {
+		contract.BossID = bosses[0].ID
 	}
 
 	c.Set("user", user)
@@ -139,7 +145,6 @@ func UsersContractShow(c buffalo.Context) error {
 		c.Flash().Add("warning", "Cannot find that user.")
 		return c.Redirect(307, "/")
 	}
-	c.Set("current_user", user)
 
 	// Load contract
 	contract := &models.Contract{}
@@ -149,13 +154,13 @@ func UsersContractShow(c buffalo.Context) error {
 		c.Flash().Add("warning", "Cannot find that contract.")
 		return c.Redirect(307, "/users/%s", user.ID)
 	}
-	c.Set("contract", contract)
-
 	// Create empty task; set visible dates to now.
 	task := &models.Task{}
 	_ = task.CreateNew()
-	c.Set("task", task)
 
+	c.Set("current_user", user)
+	c.Set("contract", contract)
+	c.Set("task", task)
 	return c.Render(http.StatusOK, r.HTML("users/contract_show.html"))
 }
 

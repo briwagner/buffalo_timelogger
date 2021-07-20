@@ -1,5 +1,5 @@
 <div>
-  <h1>New Contract for <%= user.FullName() %></h1>
+  <h1>New Contract</h1>
 
   <%= if (len(bosses) > 0) { %>
     <%= form_for(contract, {action: userContractsPath({user_id: user.ID})}) { %>
