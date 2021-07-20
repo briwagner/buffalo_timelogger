@@ -2,7 +2,6 @@ package actions
 
 import (
 	"buftester/models"
-	"log"
 	"net/http"
 	"strconv"
 
@@ -16,32 +15,36 @@ func BossesIndex(c buffalo.Context) error {
 	tx := c.Value("tx").(*pop.Connection)
 	bosses := []models.Boss{}
 
-	page := 1
-	if c.Param("page") != "" {
-		p, err := strconv.Atoi(c.Param("page"))
-		if err != nil {
-			log.Printf("Cannot parse pager param")
-		} else {
+	// Use paginator.
+
+	// Simple way.
+	// q := tx.PaginateFromParams(c.Params())
+
+	// Create our own so we can override the per-page.
+	// TODO: is there an easier way to override this?
+	perPage := 5
+	page := 0
+	if c.Params().Get("page") != "" {
+		p, err := strconv.Atoi(c.Params().Get("page"))
+		if err == nil {
 			page = p
 		}
 	}
 
-	q := tx.Paginate(page, 12)
+	q := tx.Paginate(page, perPage)
+	q.Paginator.PerPage = 5
 	err := q.All(&bosses)
 	if err != nil {
 		c.Flash().Add("warning", "No bosses found.")
-	}
-
-	// Handle possible empty result from pager.
-	if page > 1 && len(bosses) == 0 {
-		c.Flash().Add("warning", "No bosses found. Try a lower page number.")
+		return c.Redirect(307, "/")
 	}
 
 	c.Set("bosses", bosses)
+	c.Set("paginator", q.Paginator)
 	return c.Render(http.StatusOK, r.HTML("bosses/index.html"))
 }
 
-// BossesNew shows the form to create a new Boxx.
+// BossesNew shows the form to create a new Boss.
 func BossesNew(c buffalo.Context) error {
 	c.Set("boss", &models.Boss{})
 	return c.Render(http.StatusOK, r.HTML("bosses/new.html"))

@@ -6,6 +6,24 @@
   <% } %>
 </ul>
 
+<%= if (paginator.TotalPages > 1) { %>
+  <div class="pager">
+    <ul class="pagination">
+      <%= for (idx) in between(0, (paginator.TotalPages + 1)) { %>
+        <% let itemClasses = "page-item" %>
+        <% if (idx == paginator.Page) { %>
+            <% itemClasses = itemClasses + " active" %>
+        <% } %>
+        <li class="<%= itemClasses %>">
+          <%= linkTo(bossesIndexPath({page: idx}), {class: "page-link"}) { %>
+            <%= idx %>
+          <% } %>
+        </li>
+      <% } %>
+    </ul>
+  </div>
+<% } %>
+
 <div class="footer-links row-end">
   <%= linkTo(newBossesPath(), {class: "btn btn-primary"}) { %>
     Add a Boss
