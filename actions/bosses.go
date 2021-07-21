@@ -96,14 +96,26 @@ func BossesCreate(c buffalo.Context) error {
 func BossesShow(c buffalo.Context) error {
 	tx := c.Value("tx").(*pop.Connection)
 
-	boss := &models.Boss{}
-	err := tx.Eager("Contracts.User").Find(boss, c.Param("boss_id"))
+	boss := models.Boss{}
+	err := tx.Find(&boss, c.Param("boss_id"))
 	if err != nil {
 		c.Flash().Add("warning", "Cannot find that boss.")
 		return c.Redirect(307, "/")
 	}
 
 	user := c.Value("current_user").(*models.User)
+
+	// Get contracts for this user only.
+	cs := models.Contracts{}
+	q := tx.Where("user_id = ?", user.ID).Where("boss_id = ?", boss.ID)
+	err = q.Eager("User").All(&cs)
+	if err != nil {
+		c.Flash().Add("warning", "Cannot find contracts.")
+		return c.Redirect(307, "/bosses/index")
+	}
+
+	boss.Contracts = cs
+
 	c.Set("user", user)
 	c.Set("boss", boss)
 	return c.Render(http.StatusOK, r.HTML("bosses/show.html"))

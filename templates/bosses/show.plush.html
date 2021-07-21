@@ -14,7 +14,8 @@
   </div>
 <% } else { %>
   <p>You don't have a contract with this boss.</p>
-  <% linkTo(newUserContractsPath({user_id: user.ID, bid: boss.ID}), {class: "btn btn-primary"}) { %>
-    Add a contract
-  <% } %>
+  <%# We avoid helpers, and manually build the href here because int's don't work. %>
+  <% let path = pathFor(newUserContractsPath({user_id: user.ID})) %>
+  <% path = path + "?bid=" + boss.ID %>
+  <a class="btn btn-primary" href="<%= path %>">Add a contract</a>
 <% } %>
