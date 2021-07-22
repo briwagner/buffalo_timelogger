@@ -131,7 +131,7 @@ func UsersContractCreate(c buffalo.Context) error {
 	}
 
 	c.Flash().Add("success", "Contract created.")
-	return c.Redirect(303, "/users/%s", user.ID)
+	return c.Redirect(303, "/users/%s/contracts/%d", user.ID, contract.ID)
 }
 
 // UsersContractShow gets a single contract for the User ID.
