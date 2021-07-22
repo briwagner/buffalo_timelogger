@@ -17,5 +17,10 @@
   <%# We avoid helpers, and manually build the href here because int's don't work. %>
   <% let path = pathFor(newUserContractsPath({user_id: user.ID})) %>
   <% path = path + "?bid=" + boss.ID %>
-  <a class="btn btn-primary" href="<%= path %>">Add a contract</a>
+  <!-- <a class="btn btn-primary" href="<%= path %>">Add a contract</a> -->
+  <!-- https://github.com/brittonhayes/hikeshi/search?q=linkTo -->
+
+  <%= linkTo([newUserContractsPath({user_id: user.ID}), "/", "?bid=" + boss.ID], {class: "btn btn-primary"}) { %>
+    Add a contract
+  <% } %>
 <% } %>
