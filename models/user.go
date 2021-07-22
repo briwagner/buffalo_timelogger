@@ -142,7 +142,8 @@ func (u *User) ValidateUpdate(tx *pop.Connection) (*validate.Errors, error) {
 // GetContracts
 func (u *User) GetContracts(tx *pop.Connection) error {
 	contracts := []Contract{}
-	err := tx.Where("user_id = ?", u.ID).Eager("Boss").All(&contracts)
+	q := tx.Where("user_id = ?", u.ID).Eager("Boss")
+	err := q.Order("updated_at desc").All(&contracts)
 	if err != nil {
 		return err
 	}

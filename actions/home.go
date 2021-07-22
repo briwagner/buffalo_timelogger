@@ -15,17 +15,14 @@ func HomeHandler(c buffalo.Context) error {
 	if u == nil {
 		c.Set("new_user", models.User{})
 	} else {
-		// Reload user similar to SetCurrentUser middleware.
-		// Todo: can we avoid this replay?
 		tx := c.Value("tx").(*pop.Connection)
-		if uid := c.Session().Get("current_user_id"); uid != nil {
-			u := &models.User{}
-			err := tx.Eager("Contracts.Boss").Find(u, uid)
-			if err != nil {
-				return errors.WithStack(err)
-			}
-			c.Set("current_user", u)
+
+		user := c.Value("current_user").(*models.User)
+		err := user.GetContracts(tx)
+		if err != nil {
+			return errors.WithStack(err)
 		}
+		c.Set("current_user", user)
 	}
 	return c.Render(http.StatusOK, r.HTML("home/index.html"))
 }
