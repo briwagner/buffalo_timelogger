@@ -33,7 +33,7 @@
   <div class="col-md-10">
     <div class="jumbotron">
       <h3>Log Time</h3>
-      <%= form_for(task, {action: userTaskCreatePath({user_id: current_user.ID, contract_id: contract.ID})}) { %>
+      <%= form_for(task, {action: userContractTaskCreatePath({user_id: current_user.ID, contract_id: contract.ID})}) { %>
         <%= partial("tasks/user_task.html") %>
       <% } %>
     </div>

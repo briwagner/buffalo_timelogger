@@ -94,7 +94,7 @@ func App() *buffalo.App {
 		b.GET("/{boss_id}", BossesShow)
 		b.Use(Authorize)
 
-		app.POST("/users/{user_id}/contracts{contract_id}/task/create", Authorize(UserTaskCreate))
+		app.POST("/users/{user_id}/contracts/{contract_id}/task/create", Authorize(UserTaskCreate))
 
 		t := app.Group("/tasks")
 		t.GET("/{task_id}", TasksShow)
