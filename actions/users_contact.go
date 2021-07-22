@@ -4,7 +4,6 @@ import (
 	"buftester/models"
 	"fmt"
 	"net/http"
-	"strconv"
 
 	"github.com/gobuffalo/buffalo"
 	"github.com/gobuffalo/pop/v5"
@@ -204,5 +203,5 @@ func UserTaskCreate(c buffalo.Context) error {
 		return c.Render(422, r.HTML("users/contract_show.html"))
 	}
 	c.Flash().Add("success", "New task created")
-	return c.Redirect(303, "/users/%s/contracts/%s", user.ID, strconv.Itoa(contract.ID))
+	return c.Redirect(303, "/users/%s/contracts/%d", user.ID, contract.ID)
 }

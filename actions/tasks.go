@@ -4,7 +4,6 @@ import (
 	"buftester/models"
 	"log"
 	"net/http"
-	"strconv"
 	"time"
 
 	"github.com/gobuffalo/buffalo"
@@ -73,6 +72,5 @@ func TasksUpdate(c buffalo.Context) error {
 	}
 
 	c.Flash().Add("success", "Task updated.")
-	return c.Redirect(303, "/users/%s/contracts/%s", task.Contract.UserID, strconv.Itoa(task.Contract.ID))
-	// return c.Redirect(303, "/")
+	return c.Redirect(303, "/users/%s/contracts/%d", task.Contract.UserID, task.Contract.ID)
 }
