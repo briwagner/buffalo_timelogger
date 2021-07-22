@@ -17,11 +17,12 @@ test:
   # Note that if you use `url`, other configurations are silently ignored.
   # In this case, the URL must contain all required connection parameters.
   #
-  database: "buftester_test"
+  dialect: "mysql"
+  database: {{envOr "DATABASE" "timelogger"}}
   host: "localhost"
-  port: "3306"
-  user: "root"
-  password: "root"
+  port: {{envOr "DATABASE_PORT" "3306"}}
+  user: {{envOr "DATABASE_USER" "timelogger"}}
+  password: {{envOr "DATABASE_PASSWORD" "password"}}
 
 production:
   #
@@ -30,11 +31,11 @@ production:
   #url: {{envOr "DATABASE_URL" "mysql://root:root@(localhost:3306)/buftester_production?parseTime=true&multiStatements=true&readTimeout=3s"}}
   #
   dialect: "mysql"
-  database: "ze98fuupnnbkjto0"
-  host: "ao9moanwus0rjiex.cbetxkdyhwsb.us-east-1.rds.amazonaws.com"
+  database: {{envOr "DATABASE" "timelogger"}}
+  host: "localhost"
   port: {{envOr "DATABASE_PORT" "3306"}}
-  user: {{envOr "DATABASE_USER" "root"}}
-  password: {{envOr "DATABASE_PASSWORD" "root"}}
+  user: {{envOr "DATABASE_USER" "timelogger"}}
+  password: {{envOr "DATABASE_PASSWORD" "password"}}
   #
   # And you can also override connection parameters by setting it under options.
   #
