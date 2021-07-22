@@ -197,6 +197,7 @@ func UserTaskCreate(c buffalo.Context) error {
 	}
 
 	if verrs.HasAny() {
+		c.Set("contract", contract)
 		c.Set("task", task)
 		// Make the errors available inside the html template
 		c.Set("errors", verrs)

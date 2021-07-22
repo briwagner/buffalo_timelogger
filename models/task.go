@@ -41,8 +41,8 @@ func (t Tasks) String() string {
 func (t *Task) Validate(tx *pop.Connection) (*validate.Errors, error) {
 	errs := validate.NewErrors()
 
-	if t.Duration == 0 {
-		errs.Add("duration", "Duration cannot be zero.")
+	if t.Duration <= 0 {
+		errs.Add("duration", "Please enter a valid time.")
 	}
 	return errs, nil
 }
