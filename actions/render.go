@@ -2,9 +2,11 @@ package actions
 
 import (
 	"fmt"
+	"html/template"
 
 	"github.com/gobuffalo/buffalo/render"
 	"github.com/gobuffalo/packr/v2"
+	"github.com/gobuffalo/plush/v4"
 )
 
 var r *render.Engine
@@ -40,6 +42,13 @@ func init() {
 					return fmt.Sprintf("%dh %dm", t/60, min)
 				}
 				return fmt.Sprintf("%dm", t)
+			},
+			"envStatus": func(help plush.HelperContext) (template.HTML, error) {
+				env := help.Context.Value("environment")
+				if env != "production" {
+					return "<div class='env-status status-<%= env %>'>Environment Detector: <%= env %></div>", nil
+				}
+				return "", nil
 			},
 		},
 	})

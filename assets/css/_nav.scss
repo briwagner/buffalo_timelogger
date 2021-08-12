@@ -34,3 +34,18 @@ ul.main-nav > .nav-item:first-of-type a {
 .nav {
   justify-content: space-between;
 }
+
+.env-status {
+  padding: 1em;
+  background-color: #efefef;
+
+  &.status-development {
+    background-color: green;
+    color: white;
+  }
+
+  &.status-stage {
+    background-color: gold;
+    color: black;
+  }
+}
