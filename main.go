@@ -14,6 +14,13 @@ import (
 // application that is. :)
 func main() {
 	app := actions.App()
+	// Use below for SSL.
+	// serv := &servers.Simple{Server: &http.Server{}}
+	// s := servers.WrapTLS(serv.Server, "server.crt", "server.key")
+	// if err := app.Serve(s); err != nil {
+	// 	log.Fatal(err)
+	// }
+
 	if err := app.Serve(); err != nil {
 		log.Fatal(err)
 	}
